@@ -1,0 +1,42 @@
+import { Controller, Get, Post, Patch, Delete, Param, Body, Query, HttpCode, HttpStatus } from '@nestjs/common';
+import { TasksService } from './tasks.service';
+import { CreateTaskDto } from './dto/create-task.dto';
+import { UpdateTaskDto } from './dto/update-task.dto';
+
+@Controller('tasks')
+export class TasksController {
+  constructor(private readonly tasksService: TasksService) {}
+
+  @Get()
+  findAll() {
+    return this.tasksService.findAll();
+  }
+
+  @Get('search')
+  findByStatus(@Query('status') status: string) {
+    return this.tasksService.findByStatus(status);
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.tasksService.findOne(Number(id));
+  }
+
+  @Post()
+  create(@Body() dto: CreateTaskDto) {
+    return this.tasksService.create(dto);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() dto: UpdateTaskDto) {
+    return this.tasksService.update(Number(id), dto);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async remove(@Param('id') id: string) {
+    const ok = await this.tasksService.remove(Number(id));
+    if (!ok) return { ok: false };
+    return;
+  }
+}
