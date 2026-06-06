@@ -1,0 +1,75 @@
+# HTTP tests for Lab 8 (REST Client)
+# Usage: open this file in VS Code with the REST Client extension and click "Send Request" for each request.
+
+@baseUrl = http://localhost:3000
+
+### Get all tasks
+GET {{baseUrl}}/tasks
+Accept: application/json
+
+### Search tasks by status
+GET {{baseUrl}}/tasks/search?status=pending
+Accept: application/json
+
+### Create tag #1
+POST {{baseUrl}}/tags
+Content-Type: application/json
+
+{
+  "name": "urgent"
+}
+
+### Create tag #2
+POST {{baseUrl}}/tags
+Content-Type: application/json
+
+{
+  "name": "backend"
+}
+
+### Get all tags
+GET {{baseUrl}}/tags
+Accept: application/json
+
+### Create task with tags (use existing tag IDs)
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "HTTP-file task",
+  "description": "Created via http-tests.http",
+  "status": "pending",
+  "priority": "high",
+  "tagIds": [1, 2]
+}
+
+### Get task by id
+GET {{baseUrl}}/tasks/1
+Accept: application/json
+
+### Update task (change status and tags)
+PATCH {{baseUrl}}/tasks/1
+Content-Type: application/json
+
+{
+  "status": "in-progress",
+  "tagIds": [1]
+}
+
+### Search tasks (in-progress)
+GET {{baseUrl}}/tasks/search?status=in-progress
+Accept: application/json
+
+### Delete task
+DELETE {{baseUrl}}/tasks/1
+
+### Update tag
+PATCH {{baseUrl}}/tags/1
+Content-Type: application/json
+
+{
+  "name": "urgent-updated"
+}
+
+### Delete tag
+DELETE {{baseUrl}}/tags/2
