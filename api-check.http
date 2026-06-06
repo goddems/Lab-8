@@ -1,0 +1,122 @@
+### Lab 8 — API check (use with VS Code REST Client)
+# Run the Nest.js server first: `npm run start:dev`
+
+@baseUrl = http://localhost:3000
+
+### Check static file
+GET {{baseUrl}}/check.html
+
+### List tasks
+GET {{baseUrl}}/tasks
+Accept: application/json
+
+### Get task by id (existing)
+GET {{baseUrl}}/tasks/1
+Accept: application/json
+
+### Get non-existent task (should return 404 or null)
+GET {{baseUrl}}/tasks/not-found-id
+Accept: application/json
+
+### Search tasks by status
+GET {{baseUrl}}/tasks/search?status=done
+Accept: application/json
+
+### Create task (valid)
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "Task from http file",
+  "priority": "low",
+  "description": "Created by api-check.http"
+}
+
+### Create task with extra field (whitelist test — extra field should be removed)
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "Attempt with extra field",
+  "priority": "medium",
+  "isAdmin": true
+}
+
+### Create task with tags (provide existing tag IDs)
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "Task with tags",
+  "priority": "high",
+  "tagIds": [1, 2]
+}
+
+### Create task with invalid data (should return 400 and validation errors)
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "",
+  "priority": "invalid"
+}
+
+### Update task (id = 1)
+PATCH {{baseUrl}}/tasks/1
+Content-Type: application/json
+
+{
+  "title": "Updated title (http file)",
+  "status": "in-progress"
+}
+
+### Delete task (id = 1)
+DELETE {{baseUrl}}/tasks/1
+
+### Final list
+GET {{baseUrl}}/tasks
+Accept: application/json
+
+### Tags: create two tags
+POST {{baseUrl}}/tags
+Content-Type: application/json
+
+{
+  "name": "urgent"
+}
+
+POST {{baseUrl}}/tags
+Content-Type: application/json
+
+{
+  "name": "backend"
+}
+
+### List tags
+GET {{baseUrl}}/tags
+Accept: application/json
+
+### Get tag by id
+GET {{baseUrl}}/tags/1
+Accept: application/json
+
+### Create task linked to tags (use returned tag ids)
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "Linked task",
+  "priority": "medium",
+  "tagIds": [1]
+}
+
+### Update tag
+PATCH {{baseUrl}}/tags/1
+Content-Type: application/json
+
+{
+  "name": "urgent-updated"
+}
+
+### Delete tag
+DELETE {{baseUrl}}/tags/2
